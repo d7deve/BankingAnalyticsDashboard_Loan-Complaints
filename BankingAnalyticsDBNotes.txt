@@ -1,0 +1,442 @@
+CREATE DATABASE BankingAnalyticsDB;
+GO
+
+USE BankingAnalyticsDB;
+GO
+
+CREATE TABLE Branches (
+	BranchID INT PRIMARY KEY,
+	BranchName VARCHAR(100) NOT NULL,
+	City VARCHAR(100),
+	StateName VARCHAR(100),
+	Region VARCHAR(50)
+);
+
+CREATE TABLE Employees (
+	EmployeeID INT PRIMARY KEY,
+	EmployeeName VARCHAR(100) NOT NULL,
+	BranchID INT,
+	RoleName VARCHAR(50),
+	HireDate DATE,
+	FOREIGN KEY (BranchID) REFERENCES Branches(BranchID)
+);
+
+CREATE TABLE Customers (
+	CustomerID INT PRIMARY KEY,
+	FirstName VARCHAR(50),
+	LastName VARCHAR(50),
+	Gender VARCHAR(10),
+	DateOfBirth DATE,
+	City VARCHAR(100),
+	StateName VARCHAR(100),
+	Occupation VARCHAR(100),
+	AnnualIncome DECIMAL(18,2)
+);
+
+CREATE TABLE LoanApplications (
+	ApplicationID INT PRIMARY KEY,
+	CustomerID INT NOT NULL,
+	BranchID INT NOT NULL,
+	EmployeeID INT NOT NULL,
+	ApplicationDate DATE NOT NULL,
+	LoanType VARCHAR(50),
+	LoanAmount DECIMAL(18,2),
+	InterestRate DECIMAL(5,2),
+	LoanTermMonths INT,
+	EmploymentLengthYears INT,
+	HomeOwnership VARCHAR(30),
+	Purpose VARCHAR(50),
+	ApplicationStatus VARCHAR(30),
+	DebttoIncomeRatio DECIMAL(5,2),
+	FOREIGN KEY (CustomerID) REFERENCES
+Customers(CustomerID),
+	FOREIGN KEY (BranchID) REFERENCES Branches(BranchID),
+	FOREIGN KEY (EmployeeID) REFERENCES
+Employees(EmployeeID)
+);
+CREATE TABLE LoanAccounts (
+	LoanAccountID INT PRIMARY KEY,
+	ApplicationID INT NOT NULL,
+	DisbursalDate DATE,
+	FundedAmount DECIMAL(18,2),
+	OutstandingAmount DECIMAL(18,2),
+	LoanStatus VARCHAR(30),
+	LastPaymentDate DATE,
+	FOREIGN KEY (ApplicationID) REFERENCES
+LoanApplications(ApplicationID)
+);
+
+CREATE TABLE Repayments (
+	RepaymentID INT PRIMARY KEY,
+	LoanAccountID INT NOT NULL,
+	PaymentDate DATE NOT NULL,
+	PaymentAmount DECIMAL(18,2),
+	PaymentMode VARCHAR(30),
+	FOREIGN KEY (LoanAccountID) REFERENCES
+LoanAccounts(LoanAccountID)
+);
+
+CREATE TABLE Complaints (
+	ComplaintID INT PRIMARY KEY,
+	CustomerID INT NOT NULL,
+	BranchID INT NOT NULL,
+	ComplaintDate DATE NOT NULL,
+	ComplaintType VARCHAR(100),
+	ChannelName VARCHAR(50),
+	PriorityLevel VARCHAR(20),
+	ComplaintStatus VARCHAR(30),
+	ResolutionDate DATE NULL,
+	FOREIGN KEY (CustomerID) REFERENCES
+Customers(CustomerID),
+	FOREIGN KEY (BranchID) REFERENCES Branches(BranchID)
+);
+
+SELECT * FROM Branches
+SELECT * FROM Employees
+SELECT * FROM Customers
+SELECT * FROM LoanApplications
+SELECT * FROM LoanAccounts
+SELECT * FROM Repayments
+SELECT * FROM Complaints
+
+
+INSERT INTO Branches (BranchID, BranchName, City, StateName, Region) VALUES
+(1, 'Chennai Central', 'Chennai', 'Tamil Nadu', 'South'),
+(2, 'T Nagar', 'Chennai', 'Tamil Nadu', 'South'),
+(3, 'Anna Nagar', 'Chennai', 'Tamil Nadu', 'South'),
+(4, 'Velachery', 'Chennai', 'Tamil Nadu', 'South'),
+(5, 'Coimbatore Main', 'Coimbatore', 'Tamil Nadu', 'South');
+
+INSERT INTO Customers (CustomerID, FirstName, LastName, Gender, DateOfBirth, City, StateName, Occupation, AnnualIncome) VALUES
+(101, 'Arun', 'Kumar', 'Male', '1990-05-12', 'Chennai', 'Tamil Nadu', 'Software Engineer', 1200000),
+(102, 'Meena', 'S', 'Female', '1988-11-23', 'Chennai', 'Tamil Nadu', 'Teacher', 720000),
+(103, 'Ravi', 'Shankar', 'Male', '1985-03-08', 'Coimbatore', 'Tamil Nadu', 'Business Owner', 1800000),
+(104, 'Priya', 'R', 'Female', '1992-07-15', 'Madurai', 'Tamil Nadu', 'Accountant', 900000),
+(105, 'Suresh', 'B', 'Male', '1987-01-30', 'Salem', 'Tamil Nadu', 'Sales Manager', 1100000),
+(106, 'Divya', 'M', 'Female', '1995-09-18', 'Chennai', 'Tamil Nadu', 'HR Executive', 650000),
+(107, 'Karthik', 'P', 'Male', '1991-12-02', 'Trichy', 'Tamil Nadu', 'Doctor', 2400000),
+(108, 'Lakshmi', 'N', 'Female', '1989-04-21', 'Erode', 'Tamil Nadu', 'Consultant', 1500000),
+(109, 'Vignesh', 'A', 'Male', '1993-10-11', 'Chennai', 'Tamil Nadu', 'Analyst', 800000),
+(110, 'Anitha', 'K', 'Female', '1990-06-26', 'Madurai', 'Tamil Nadu', 'Entrepreneur', 1600000);
+
+INSERT INTO Employees (EmployeeID, EmployeeName, BranchID, RoleName, HireDate) VALUES
+(201, 'Ramesh Iyer', 1, 'Branch Manager', '2020-01-15'),
+(202, 'Nandhini Ravi', 2, 'Loan Officer', '2021-06-10'),
+(203, 'Kiran Kumar', 3, 'Loan Officer', '2019-09-20'),
+(204, 'Farah Khan', 4, 'Relationship Manager', '2022-03-05'),
+(205, 'Mohan Raj', 5, 'Branch Manager', '2018-11-12');
+
+INSERT INTO LoanApplications (ApplicationID, CustomerID, BranchID, EmployeeID, ApplicationDate, LoanType, LoanAmount, InterestRate, LoanTermMonths, EmploymentLengthYears, HomeOwnership, Purpose, ApplicationStatus, DebttoincomeRatio) VALUES
+(301, 101, 1, 201, '2025-01-10', 'Personal Loan', 500000, 11.25, 36, 8, 'Owned', 'Home Renovation', 'Approved', 18.40),
+(302, 102, 2, 202, '2025-01-18', 'Education Loan', 300000, 9.80, 48, 6, 'Rented', 'Higher Studies', 'Approved', 14.20),
+(303, 103, 5, 205, '2025-02-02', 'Business Loan', 1200000, 13.50, 60, 10, 'Owned', 'Business Expansion', 'Approved', 22.10),
+(304, 104, 3, 203, '2025-02-14', 'Home Loan', 2500000, 8.95, 180, 7, 'Mortgage', 'Home Purchase', 'Rejected', 35.60),
+(305, 105, 4, 204, '2025-03-01', 'Car Loan', 800000, 10.25, 48, 9, 'Owned', 'Vehicle Purchase', 'Approved', 16.90),
+(306, 106, 1, 201, '2025-03-08', 'Personal Loan', 200000, 12.15, 24, 3, 'Rented', 'Medical Expense', 'Approved', 24.50),
+(307, 107, 2, 202, '2025-03-15', 'Home Loan', 3000000, 8.70, 240, 12, 'Mortgage', 'Home Purchase', 'Approved', 28.00),
+(308, 108, 3, 203, '2025-03-22', 'Business Loan', 1500000, 13.20, 60, 11, 'Owned', 'Inventory Expansion', 'Pending', 19.80),
+(309, 109, 4, 204, '2025-04-02', 'Education Loan', 450000, 9.50, 36, 4, 'Rented', 'Professional Course', 'Approved', 12.30),
+(310, 110, 5, 205, '2025-04-10', 'Personal Loan', 600000, 11.00, 36, 9, 'Owned', 'Wedding Expense', 'Approved', 17.60);
+
+INSERT INTO LoanAccounts (LoanAccountID, ApplicationID, DisbursalDate, FundedAmount, OutstandingAmount, LoanStatus, LastPaymentDate) VALUES
+(401, 301, '2025-01-15', 500000, 455000, 'Active', '2025-03-31'),
+(402, 302, '2025-01-22', 300000, 286000, 'Active', '2025-03-28'),
+(403, 303, '2025-02-05', 1200000, 1125000, 'Active', '2025-04-01'),
+(404, 305, '2025-03-04', 800000, 760000, 'Active', '2025-03-30'),
+(405, 306, '2025-03-10', 200000, 192000, 'Active', '2025-04-02'),
+(406, 307, '2025-03-18', 3000000, 2895000, 'Active', '2025-04-01'),
+(407, 309, '2025-04-05', 450000, 440000, 'Active', '2025-04-08'),
+(408, 310, '2025-04-12', 600000, 585000, 'Active', '2025-04-12');
+
+INSERT INTO Repayments (RepaymentID, LoanAccountID, PaymentDate, PaymentAmount, PaymentMode) VALUES
+(501, 401, '2025-02-15', 15000, 'UPI'),
+(502, 401, '2025-03-15', 15000, 'Bank Transfer'),
+(503, 402, '2025-02-20', 12000, 'UPI'),
+(504, 403, '2025-03-05', 30000, 'Cheque'),
+(505, 404, '2025-04-01', 25000, 'UPI'),
+(506, 405, '2025-04-02', 10000, 'Cash'),
+(507, 406, '2025-04-01', 35000, 'Bank Transfer'),
+(508, 407, '2025-04-08', 8000, 'UPI'),
+(509, 408, '2025-04-12', 10000, 'UPI');
+
+INSERT INTO Complaints (ComplaintID, CustomerID, BranchID, ComplaintDate, ComplaintType, ChannelName, PriorityLevel, ComplaintStatus,ResolutionDate) VALUES
+(601, 101, 1, '2025-02-18', 'Delay in loan disbursal', 'Branch', 'High', 'Resolved', '2025-02-20'),
+(602, 102, 2, '2025-02-25', 'Interest rate clarification', 'Call Center', 'Medium', 'Resolved', '2025-02-26'),
+(603, 103, 5, '2025-03-06', 'Repayment schedule issue', 'Email', 'High', 'Open', NULL),
+(604, 104, 3, '2025-03-12', 'Document verification delay', 'Branch', 'High', 'Resolved', '2025-03-15'),
+(605, 105, 4, '2025-03-18', 'Payment posting delay', 'Mobile App', 'Medium', 'Resolved', '2025-03-19'),
+(606, 106, 1, '2025-03-24', 'Loan status not updated', 'Call Center', 'Low', 'Resolved', '2025-03-25'),
+(607, 107, 2, '2025-04-02', 'Account statement mismatch', 'Email', 'Medium', 'Open', NULL),
+(608, 108, 3, '2025-04-05', 'Prepayment penalty query', 'Branch', 'Low', 'Resolved', '2025-04-06');
+
+
+SELECT COUNT (*) AS BranchCount FROM Branches;
+SELECT COUNT (*) AS CustomerCount FROM Customers;
+SELECT COUNT (*) AS EmployeesCount FROM Employees;
+SELECT COUNT (*) AS ApplicationCount FROM LoanApplications;
+SELECT COUNT (*) AS LoanAccountCount FROM LoanAccounts;
+SELECT COUNT (*) AS ComplaintCount FROM Complaints;
+
+
+-- Total loan applications
+SELECT COUNT (*) AS TotalLoanApplications FROM LoanApplications;
+
+--Total funded amount
+SELECT SUM(FundedAmount) AS TotalFundedAmount FROM LoanAccounts;
+
+-- Total repayments received
+SELECT SUM(PaymentAmount) AS TotalAmountReceived FROM Repayments;
+
+--Average interest rate
+SELECT AVG(InterestRate) AS AvgInterestRate FROM LoanApplications;
+
+--Average debt to income ratio
+SELECT AVG(DebtToIncomeRatio) AS AvgDTI FROM LoanApplications;
+
+--Loan applications status (approved, rejected, pending)
+SELECT ApplicationStatus, COUNT(*) AS ApplicationsCount FROM LoanApplications GROUP BY ApplicationStatus ORDER BY ApplicationsCount DESC;
+
+--Active loan accounts count
+SELECT LoanStatus, Count(*) AS LoanCount FROM LoanAccounts GROUP BY LoanStatus;
+
+--Total outstanding amount
+SELECT SUM(OutstandingAmount) AS TotalOutstadingAmount FROM LoanAccounts
+
+--Funded Vs Outstanding by Loan Account
+SELECT
+	LoanAccountID,
+	FundedAmount,
+	OutstandingAmount,
+	(FundedAmount - OutstandingAmount) AS AmountReceivedSoFar
+FROM LoanAccounts
+ORDER BY AmountReceivedSoFar DESC;
+
+--Loan type wise application and requested amount
+SELECT
+	LoanType,
+	COUNT(*) AS TotalApplications,
+	SUM(LoanAmount) AS TotalRequestedAmount
+FROM LoanApplications
+GROUP BY LoanType
+ORDER BY TotalRequestedAmount DESC;
+
+
+--Branch wise loan applications
+SELECT
+	b.BranchName,
+	COUNT(la.ApplicationID) AS TotalApplications
+FROM LoanApplications la
+JOIN Branches b ON la.BranchID = b.BranchID
+GROUP BY b.BranchName
+ORDER BY TotalApplications DESC;
+
+--Branch wise funded amount
+SELECT
+	b.BranchName,
+	SUM(lacc.FundedAmount) AS TotalFundedAmount
+FROM LoanAccounts lacc
+JOIN LoanApplications la ON lacc.ApplicationID = la.ApplicationID
+JOIN Branches b ON la.BranchID = b.BranchID
+GROUP BY b.BranchName
+ORDER BY TotalFundedAmount DESC;
+
+
+--Branch wise total collections
+SELECT
+	b.BranchName,
+	SUM(r.PaymentAmount) AS TotalCollections
+FROM Repayments r
+JOIN LoanAccounts lacc ON r.LoanAccountID = lacc.LoanAccountID
+JOIN LoanApplications la ON lacc.ApplicationID = la.ApplicationID
+JOIN Branches b ON la.BranchID = b.BranchID
+GROUP BY BranchName
+ORDER BY TotalCollections DESC;
+
+--Employee wise application handling
+SELECT
+	e.EmployeeName,
+	e.RoleName,
+	COUNT(la.ApplicationID) AS ApplicationsHandled
+FROM LoanApplications la
+JOIN Employees e ON la.EmployeeID = e.EmployeeID
+GROUP BY e.EmployeeName, e.RoleName
+ORDER BY ApplicationsHandled DESC;
+
+
+--Monthly loan application trend
+SELECT
+	YEAR(ApplicationDate) AS AppYear,
+	MONTH(ApplicationDate) AS AppMonth,
+	COUNT(*) AS TotalApplications
+FROM LoanApplications
+GROUP BY YEAR(ApplicationDate), Month(ApplicationDate)
+ORDER BY AppYear, AppMonth;
+
+--Monthly funded amount trend
+SELECT
+	YEAR(DisbursalDate) AS DisbursalYear,
+	Month(DisbursalDate) AS DisbursalMonth,
+	SUM(FundedAmount) AS TotalFundedAmount
+FROM LoanAccounts
+GROUP BY YEAR(DisbursalDate), MONTH(DisbursalDate)
+ORDER BY DisbursalYear, DisbursalMonth;
+
+--Monthly collection trend
+SELECT
+	YEAR(PaymentDate) AS PaymentYear,
+	Month(PaymentDate) AS PaymentMonth,
+	SUM(PaymentAmount) AS TotalCollectionAmount
+FROM Repayments
+GROUP BY YEAR(PaymentDate), Month(PaymentDate)
+ORDER BY PaymentYear, PaymentMonth;
+
+
+--Total complaints by status
+SELECT
+	ComplaintStatus,
+	COUNT(*) AS ComplaintCount
+FROM Complaints
+GROUP BY ComplaintStatus
+ORDER BY ComplaintCount DESC;
+
+-- Complaints by channel
+SELECT
+	ChannelName,
+	Count(*) AS ComplaintCount
+FROM Complaints
+GROUP BY ChannelName
+ORDER BY ComplaintCount DESC;
+
+--Complaints by priority
+SELECT
+	PriorityLevel,
+	COUNT(*) AS ComplaintCount
+FROM Complaints
+GROUP BY PriorityLevel
+ORDER BY ComplaintCount DESC;
+
+--Average resolution time in days
+SELECT
+	AVG(DATEDIFF(DAY, ComplaintDate, ResolutionDate)*1.0) AS AvgResolutionDays
+FROM Complaints
+WHERE ResolutionDate IS NOT NULL;
+
+--SLA performance resolved within 3 days
+SELECT
+	COUNT(*) AS TotalResolvedComplaints,
+	SUM(CASE WHEN DATEDIFF(DAY, ComplaintDate, ResolutionDate) <=3 THEN 1 ELSE 0 END) AS ResolvedWithinSLA,
+	CAST(100.0 * SUM(CASE WHEN DATEDIFF(DAY, ComplaintDate, ResolutionDate) <= 3 THEN 1 ELSE 0 END) / COUNT(*)
+	AS DECIMAL(5,2)) AS SLAResolutionPercent
+FROM Complaints
+WHERE ResolutionDate IS NOT NULL;
+
+
+--Power BI tables
+--Loan Performance Detail
+SELECT 
+    la.ApplicationID,
+    la.ApplicationDate,
+    la.LoanType,
+    la.LoanAmount,
+    la.InterestRate,
+    la.DebtToIncomeRatio,
+    la.ApplicationStatus,
+    c.CustomerID,
+    c.FirstName + ' ' + c.LastName AS CustomerName,
+    c.City,
+    c.Occupation,
+    b.BranchName,
+    e.EmployeeName,
+    lacc.LoanAccountID,
+    lacc.DisbursalDate,
+    lacc.FundedAmount,
+    lacc.OutstandingAmount,
+    lacc.LoanStatus,
+    lacc.LastPaymentDate
+FROM LoanApplications la
+LEFT JOIN Customers c ON la.CustomerID = c.CustomerID
+LEFT JOIN Branches b ON la.BranchID = b.BranchID
+LEFT JOIN Employees e ON la.EmployeeID = e.EmployeeID
+LEFT JOIN LoanAccounts lacc ON la.ApplicationID = lacc.ApplicationID;
+
+--Complaint Detail
+SELECT
+    cmp.ComplaintID,
+    cmp.ComplaintDate,
+    cmp.ComplaintType,
+    cmp.ChannelName,
+    cmp.PriorityLevel,
+    cmp.ComplaintStatus,
+    cmp.ResolutionDate,
+    DATEDIFF(DAY, cmp.ComplaintDate, cmp.ResolutionDate) AS ResolutionDays,
+    c.FirstName + ' ' + c.LastName AS CustomerName,
+    b.BranchName
+FROM Complaints cmp
+JOIN Customers c ON cmp.CustomerID = c.CustomerID
+JOIN Branches b ON cmp.BranchID = b.BranchID;
+
+GO
+
+--Create view of loan performance
+CREATE VIEW vw_LoanPerformanceDetail AS
+SELECT 
+    la.ApplicationID,
+    la.ApplicationDate,
+    la.LoanType,
+    la.LoanAmount,
+    la.InterestRate,
+    la.DebtToIncomeRatio,
+    la.ApplicationStatus,
+    c.CustomerID,
+    c.FirstName + ' ' + c.LastName AS CustomerName,
+    c.City,
+    c.Occupation,
+    b.BranchName,
+    e.EmployeeName,
+    lacc.LoanAccountID,
+    lacc.DisbursalDate,
+    lacc.FundedAmount,
+    lacc.OutstandingAmount,
+    lacc.LoanStatus,
+    lacc.LastPaymentDate
+FROM LoanApplications la
+LEFT JOIN Customers c ON la.CustomerID = c.CustomerID
+LEFT JOIN Branches b ON la.BranchID = b.BranchID
+LEFT JOIN Employees e ON la.EmployeeID = e.EmployeeID
+LEFT JOIN LoanAccounts lacc ON la.ApplicationID = lacc.ApplicationID;
+GO
+
+
+-- create view of complaints
+CREATE VIEW vw_ComplaintDetail AS
+SELECT
+    cmp.ComplaintID,
+    cmp.ComplaintDate,
+    cmp.ComplaintType,
+    cmp.ChannelName,
+    cmp.PriorityLevel,
+    cmp.ComplaintStatus,
+    cmp.ResolutionDate,
+    DATEDIFF(DAY, cmp.ComplaintDate, cmp.ResolutionDate) AS ResolutionDays,
+    c.FirstName + ' ' + c.LastName AS CustomerName,
+    b.BranchName
+FROM Complaints cmp
+JOIN Customers c ON cmp.CustomerID = c.CustomerID
+JOIN Branches b ON cmp.BranchID = b.BranchID;
+GO
+
+
+USE master;
+GO
+
+-- If databse exists, force disconnect users and drop it
+IF DB_ID('BankingAnalyticsDB') IS NOT NULL
+BEGIN
+	ALTER DATABASE BankingAnalyticsDB
+	SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+
+	DROP DATABASE BankingAnalyticsDB;
+END
+GO
+
+
