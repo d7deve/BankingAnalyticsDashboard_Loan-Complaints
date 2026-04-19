@@ -1,6 +1,6 @@
 # Banking Analytics Dashboard
 
-End-to-end banking analytics project built from scratch using SQL Server, NoSQL, and Power BI.
+End-to-end banking analytics project built from scratch for practicing using SQL Server, NoSQL, and Power BI. Data was AI-generated for practice, and all queries were manually typed, reviewed, and understood line by line.
 
 ## Tools
 - SSMS / SQL Server
