@@ -18,7 +18,8 @@ SQL Server + Power BI project for loan and complaints analysis.
 - Complaint status and resolution tracking
 
 ## Dashboard Preview
-![Dashboard](image.jpg)
+<img width="1157" height="657" alt="image" src="https://github.com/user-attachments/assets/bb9b35aa-fecf-4c12-bc9d-21c48c219d92" />
+
 
 ## Summary
 This project shows how SQL and Power BI can be used for banking operations and portfolio analysis.
