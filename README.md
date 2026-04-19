@@ -1,25 +1,22 @@
-# BankingAnalyticsDashboard_Loan-Complaints
-Banking Loan &amp; Customer Service Analytics Dashboard combining loan portfolio performance + complaints operations in one executive summary page
-
 # Banking Analytics Dashboard
 
-SQL Server + Power BI project for loan and complaints analysis.
+End-to-end banking analytics project built from scratch using SQL Server, NoSQL, and Power BI.
 
 ## Tools
-- SSMS
-- SQL Server
+- SSMS / SQL Server
+- NoSQL database
 - Power BI
 
 ## Features
-- Loan application summary
-- Funded and outstanding amount analysis
-- Monthly funding trends
-- Branch-wise loan comparison
-- Complaint status and resolution tracking
+- Loan application analysis
+- Funded and outstanding amount tracking
+- Branch-wise loan insights
+- Complaint and resolution analysis
+- NoSQL-based raw event / complaint data handling
 
 ## Dashboard Preview
-<img width="1157" height="657" alt="image" src="https://github.com/user-attachments/assets/bb9b35aa-fecf-4c12-bc9d-21c48c219d92" />
+<img width="1157" height="657" alt="image" src="https://github.com/user-attachments/assets/24fb462b-a53e-4fd5-af3f-21322d07d3ac" />
 
 
 ## Summary
-This project shows how SQL and Power BI can be used for banking operations and portfolio analysis.
+This project combines SQL, NoSQL, and Power BI to analyze banking operations and build interactive business dashboards.
